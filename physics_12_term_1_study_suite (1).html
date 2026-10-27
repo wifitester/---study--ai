@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physics 12 Term 1 Interactive Master Suite</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- KaTeX for LaTeX formulas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        cyber: {
+                            bg: '#0a0d14',
+                            card: '#121824',
+                            border: '#1f293d',
+                            neonCyan: '#00f3ff',
+                            neonPink: '#ff007f',
+                            neonPurple: '#9d00ff',
+                            neonGreen: '#00ff66',
+                            neonYellow: '#ffea00',
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Orbitron', 'sans-serif'],
+                        body: ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0d14;
+            color: #e2e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(255, 0, 127, 0.05) 0%, transparent 40%);
+        }
+
+        .glass-panel {
+            background: rgba(18, 24, 36, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-panel-pink {
+            background: rgba(18, 24, 36, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 0, 127, 0.2);
+        }
+
+        .neon-glow-cyan {
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        .neon-glow-pink {
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
+        }
+
+        .neon-text-cyan {
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
+        }
+
+        .neon-text-pink {
+            text-shadow: 0 0 8px rgba(255, 0, 127, 0.6);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0d14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f293d;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff;
+        }
+
+        /* Flashcard 3D Flip Effects */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-200">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="border-b border-cyber-border/80 sticky top-0 z-50 glass-panel">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-cyber-neonCyan/10 border border-cyber-neonCyan flex items-center justify-center text-cyber-neonCyan text-xl font-bold shadow-[0_0_10px_rgba(0,243,255,0.4)]">
+                    <i class="fa-solid fa-atom"></i>
+                </div>
+                <div>
+                    <h1 class="font-display font-extrabold text-lg md:text-xl tracking-wider text-white flex items-center gap-2">
+                        PHYSICS 12 <span class="text-xs px-2 py-0.5 rounded bg-cyber-neonPink/20 border border-cyber-neonPink text-cyber-neonPink font-mono">TERM 1</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-mono">NEURAL PHYSICS STUDY INTERFACE v2.0</p>
+                </div>
+            </div>
+
+            <!-- Tab Buttons -->
+            <nav class="flex items-center gap-1 overflow-x-auto py-1 max-w-full no-scrollbar">
+                <button onclick="switchTab('simulations')" id="tab-simulations" class="tab-btn px-4 py-2 rounded-lg font-display text-xs md:text-sm font-semibold transition-all flex items-center gap-2 bg-cyber-neonCyan/20 text-cyber-neonCyan border border-cyber-neonCyan">
+                    <i class="fa-solid fa-flask"></i> Simulations
+                </button>
+                <button onclick="switchTab('calculator')" id="tab-calculator" class="tab-btn px-4 py-2 rounded-lg font-display text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white border border-transparent">
+                    <i class="fa-solid fa-calculator"></i> Vector Engine
+                </button>
+                <button onclick="switchTab('formulas')" id="tab-formulas" class="tab-btn px-4 py-2 rounded-lg font-display text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white border border-transparent">
+                    <i class="fa-solid fa-book-bookmark"></i> Formulas
+                </button>
+                <button onclick="switchTab('flashcards')" id="tab-flashcards" class="tab-btn px-4 py-2 rounded-lg font-display text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white border border-transparent">
+                    <i class="fa-solid fa-layer-group"></i> Flashcards
+                </button>
+                <button onclick="switchTab('quizzes')" id="tab-quizzes" class="tab-btn px-4 py-2 rounded-lg font-display text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white border border-transparent">
+                    <i class="fa-solid fa-vial-circle-check"></i> Practice Quiz
+                </button>
+                <button onclick="switchTab('checklist')" id="tab-checklist" class="tab-btn px-4 py-2 rounded-lg font-display text-xs md:text-sm font-semibold transition-all flex items-center gap-2 text-slate-400 hover:text-white border border-transparent">
+                    <i class="fa-solid fa-list-check"></i> Solver Matrix
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl w-full mx-auto p-4 md:p-6 flex-grow">
+
+        <!-- ================= SECTION 1: SIMULATIONS ================= -->
+        <section id="sec-simulations" class="tab-content block space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-cyber-border pb-4">
+                <div>
+                    <h2 class="font-display text-xl md:text-2xl font-bold text-cyber-neonCyan flex items-center gap-2">
+                        <i class="fa-solid fa-microchip"></i> Interactive Physics Laboratories
+                    </h2>
+                    <p class="text-sm text-slate-400">Select a lab below to simulate kinematics, dynamics, or momentum in real-time.</p>
+                </div>
+                <!-- Sim Switcher Buttons -->
+                <div class="flex gap-2 bg-cyber-card p-1 rounded-lg border border-cyber-border">
+                    <button onclick="loadSim('projectile')" id="sim-btn-projectile" class="px-3 py-1.5 rounded text-xs md:text-sm font-semibold bg-cyber-neonCyan text-black transition-all">
+                        Projectile Launcher
+                    </button>
+                    <button onclick="loadSim('incline')" id="sim-btn-incline" class="px-3 py-1.5 rounded text-xs md:text-sm font-semibold text-slate-300 hover:bg-cyber-border transition-all">
+                        Incline Plane
+                    </button>
+                    <button onclick="loadSim('orbit')" id="sim-btn-orbit" class="px-3 py-1.5 rounded text-xs md:text-sm font-semibold text-slate-300 hover:bg-cyber-border transition-all">
+                        Gravitational Orbit
+                    </button>
+                </div>
+            </div>
+
+            <!-- SIMULATION 1: PROJECTILE MOTION -->
+            <div id="sim-container-projectile" class="sim-panel grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Canvas Area -->
+                <div class="lg:col-span-2 glass-panel p-4 rounded-xl flex flex-col items-center justify-center relative min-h-[380px]">
+                    <div class="absolute top-3 left-4 text-xs font-mono text-cyber-neonCyan flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-cyber-neonCyan animate-ping"></span> KINEMATICS SIMULATOR
+                    </div>
+                    <canvas id="projectileCanvas" class="w-full h-[320px] bg-slate-950/80 rounded-lg border border-cyber-border/60 mt-6"></canvas>
+                    <div class="w-full flex justify-between text-xs font-mono text-slate-400 mt-2 px-1">
+                        <span>X-Max: <span id="out-proj-xmax" class="text-cyber-neonCyan">0.0</span> m</span>
+                        <span>Y-Max: <span id="out-proj-ymax" class="text-cyber-neonCyan">0.0</span> m</span>
+                        <span>Flight Time: <span id="out-proj-time" class="text-cyber-neonCyan">0.0</span> s</span>
+                    </div>
+                </div>
+
+                <!-- Control Panel -->
+                <div class="glass-panel p-5 rounded-xl space-y-4 flex flex-col justify-between">
+                    <h3 class="font-display text-lg font-semibold text-white border-b border-cyber-border pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-cyber-neonPink"></i> Launch Parameters
+                    </h3>
+
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Initial Velocity ($v_0$)</span>
+                                <span class="text-cyber-neonCyan font-mono" id="val-proj-v">25 m/s</span>
+                            </div>
+                            <input type="range" id="input-proj-v" min="5" max="60" value="25" class="w-full accent-cyber-neonCyan cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Launch Angle ($\theta$)</span>
+                                <span class="text-cyber-neonCyan font-mono" id="val-proj-angle">45°</span>
+                            </div>
+                            <input type="range" id="input-proj-angle" min="0" max="85" value="45" class="w-full accent-cyber-neonCyan cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Initial Height ($h_0$)</span>
+                                <span class="text-cyber-neonCyan font-mono" id="val-proj-h">0 m</span>
+                            </div>
+                            <input type="range" id="input-proj-h" min="0" max="50" value="0" class="w-full accent-cyber-neonCyan cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Gravity ($g$)</span>
+                                <span class="text-cyber-neonPink font-mono" id="val-proj-g">9.8 m/s²</span>
+                            </div>
+                            <input type="range" id="input-proj-g" min="1.6" max="25" step="0.1" value="9.8" class="w-full accent-cyber-neonPink cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="pt-2 flex gap-3">
+                        <button onclick="runProjectile()" class="flex-1 py-2.5 rounded-lg font-display text-sm font-bold bg-cyber-neonCyan text-black hover:bg-cyan-300 transition-all flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(0,243,255,0.4)]">
+                            <i class="fa-solid fa-play"></i> LAUNCH
+                        </button>
+                        <button onclick="resetProjectile()" class="px-4 py-2.5 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-sm">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIMULATION 2: INCLINED PLANE -->
+            <div id="sim-container-incline" class="sim-panel hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 glass-panel p-4 rounded-xl flex flex-col items-center justify-center relative min-h-[380px]">
+                    <div class="absolute top-3 left-4 text-xs font-mono text-cyber-neonPink flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-cyber-neonPink animate-ping"></span> DYNAMICS & FORCES SIMULATOR
+                    </div>
+                    <canvas id="inclineCanvas" class="w-full h-[320px] bg-slate-950/80 rounded-lg border border-cyber-border/60 mt-6"></canvas>
+                    <div class="w-full flex justify-between text-xs font-mono text-slate-400 mt-2 px-1">
+                        <span>$F_{g,\parallel}$: <span id="out-inc-fparallel" class="text-cyber-neonCyan">0</span> N</span>
+                        <span>$F_N$: <span id="out-inc-fn" class="text-cyber-neonPink">0</span> N</span>
+                        <span>$F_f$: <span id="out-inc-ff" class="text-cyber-neonYellow">0</span> N</span>
+                        <span>Acceleration ($a$): <span id="out-inc-a" class="text-cyber-neonGreen">0</span> m/s²</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 rounded-xl space-y-4 flex flex-col justify-between">
+                    <h3 class="font-display text-lg font-semibold text-white border-b border-cyber-border pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-mountain text-cyber-neonCyan"></i> Ramp Settings
+                    </h3>
+
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Ramp Angle ($\theta$)</span>
+                                <span class="text-cyber-neonCyan font-mono" id="val-inc-angle">30°</span>
+                            </div>
+                            <input type="range" id="input-inc-angle" min="5" max="75" value="30" class="w-full accent-cyber-neonCyan cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Mass ($m$)</span>
+                                <span class="text-cyber-neonCyan font-mono" id="val-inc-m">10 kg</span>
+                            </div>
+                            <input type="range" id="input-inc-m" min="1" max="50" value="10" class="w-full accent-cyber-neonCyan cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Coefficient of Friction ($\mu$)</span>
+                                <span class="text-cyber-neonYellow font-mono" id="val-inc-mu">0.20</span>
+                            </div>
+                            <input type="range" id="input-inc-mu" min="0" max="0.8" step="0.05" value="0.20" class="w-full accent-cyber-neonYellow cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-slate-950/60 rounded-lg border border-cyber-border text-xs text-slate-300 space-y-1">
+                        <p class="font-bold text-cyber-neonCyan mb-1"><i class="fa-solid fa-lightbulb"></i> Dynamic Insight:</p>
+                        <p>When $\tan\theta > \mu$, gravity overcomes static friction and the mass accelerates down the incline!</p>
+                    </div>
+
+                    <button onclick="calculateIncline()" class="w-full py-2.5 rounded-lg font-display text-sm font-bold bg-cyber-neonPink text-white hover:bg-pink-600 transition-all flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(255,0,127,0.4)]">
+                        <i class="fa-solid fa-arrows-to-dot"></i> CALCULATE FORCE VECTOR
+                    </button>
+                </div>
+            </div>
+
+            <!-- SIMULATION 3: ORBITAL MECHANICS -->
+            <div id="sim-container-orbit" class="sim-panel hidden grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 glass-panel p-4 rounded-xl flex flex-col items-center justify-center relative min-h-[380px]">
+                    <div class="absolute top-3 left-4 text-xs font-mono text-cyber-neonPurple flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-cyber-neonPurple animate-ping"></span> GRAVITATION SIMULATOR
+                    </div>
+                    <canvas id="orbitCanvas" class="w-full h-[320px] bg-slate-950/80 rounded-lg border border-cyber-border/60 mt-6"></canvas>
+                    <div class="w-full flex justify-between text-xs font-mono text-slate-400 mt-2 px-1">
+                        <span>Orbital Speed ($v$): <span id="out-orb-v" class="text-cyber-neonCyan">7.67 km/s</span></span>
+                        <span>Centripetal $a_c$: <span id="out-orb-ac" class="text-cyber-neonPurple">8.85 m/s²</span></span>
+                        <span>Orbital Period ($T$): <span id="out-orb-t" class="text-cyber-neonYellow">92.6 mins</span></span>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 rounded-xl space-y-4 flex flex-col justify-between">
+                    <h3 class="font-display text-lg font-semibold text-white border-b border-cyber-border pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-globe text-cyber-neonPurple"></i> Orbital Parameters
+                    </h3>
+
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Altitude ($h$ above surface)</span>
+                                <span class="text-cyber-neonCyan font-mono" id="val-orb-h">400 km</span>
+                            </div>
+                            <input type="range" id="input-orb-h" min="200" max="10000" step="100" value="400" class="w-full accent-cyber-neonCyan cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">Central Planet Mass</span>
+                                <span class="text-cyber-neonPurple font-mono" id="val-orb-m">Earth ($1.0 M_\oplus$)</span>
+                            </div>
+                            <input type="range" id="input-orb-m" min="0.5" max="3" step="0.1" value="1.0" class="w-full accent-cyber-neonPurple cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-slate-950/60 rounded-lg border border-cyber-border text-xs text-slate-300 space-y-2">
+                        <div class="font-bold text-cyber-neonPurple"><i class="fa-solid fa-key"></i> Key Law:</div>
+                        <div class="text-slate-400">$F_g = F_c \implies \frac{GMm}{r^2} = \frac{mv^2}{r}$</div>
+                        <div class="text-slate-300 font-mono">Orbital Velocity $v = \sqrt{\frac{GM}{r}}$</div>
+                    </div>
+
+                    <button onclick="updateOrbit()" class="w-full py-2.5 rounded-lg font-display text-sm font-bold bg-cyber-neonPurple text-white hover:bg-purple-600 transition-all flex items-center justify-center gap-2 shadow-[0_0_12px_rgba(157,0,255,0.4)]">
+                        <i class="fa-solid fa-arrows-spin"></i> UPDATE ORBIT
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: VECTOR CALCULATOR ENGINE ================= -->
+        <section id="sec-calculator" class="tab-content hidden space-y-6">
+            <div class="border-b border-cyber-border pb-4">
+                <h2 class="font-display text-xl md:text-2xl font-bold text-cyber-neonCyan flex items-center gap-2">
+                    <i class="fa-solid fa-compass-drafting"></i> 2D Vector Decomposition & Addition Engine
+                </h2>
+                <p class="text-sm text-slate-400">Add up to 3 vector components or resolve magnitude/direction with instant visual rendering.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Vector Inputs -->
+                <div class="lg:col-span-5 glass-panel p-5 rounded-xl space-y-4">
+                    <h3 class="font-display text-base font-semibold text-white flex items-center justify-between border-b border-cyber-border pb-2">
+                        <span><i class="fa-solid fa-arrow-trend-up text-cyber-neonCyan"></i> Vector Inputs</span>
+                        <span class="text-xs text-slate-400">Polar Coordinates</span>
+                    </h3>
+
+                    <!-- Vector A -->
+                    <div class="p-3 rounded-lg bg-slate-950/60 border border-cyber-neonCyan/30 space-y-2">
+                        <div class="text-xs font-bold text-cyber-neonCyan flex justify-between">
+                            <span>VECTOR A ($\vec{A}$)</span>
+                            <span class="text-slate-400 font-mono" id="vecA-components">Ax: 0 | Ay: 0</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[11px] text-slate-400 block">Magnitude</label>
+                                <input type="number" id="vecA-mag" value="15" class="w-full bg-slate-900 border border-cyber-border rounded px-2 py-1 text-sm text-cyber-neonCyan focus:border-cyber-neonCyan outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 block">Angle (° counter-clockwise)</label>
+                                <input type="number" id="vecA-ang" value="30" class="w-full bg-slate-900 border border-cyber-border rounded px-2 py-1 text-sm text-cyber-neonCyan focus:border-cyber-neonCyan outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vector B -->
+                    <div class="p-3 rounded-lg bg-slate-950/60 border border-cyber-neonPink/30 space-y-2">
+                        <div class="text-xs font-bold text-cyber-neonPink flex justify-between">
+                            <span>VECTOR B ($\vec{B}$)</span>
+                            <span class="text-slate-400 font-mono" id="vecB-components">Bx: 0 | By: 0</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="text-[11px] text-slate-400 block">Magnitude</label>
+                                <input type="number" id="vecB-mag" value="20" class="w-full bg-slate-900 border border-cyber-border rounded px-2 py-1 text-sm text-cyber-neonPink focus:border-cyber-neonPink outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[11px] text-slate-400 block">Angle (° counter-clockwise)</label>
+                                <input type="number" id="vecB-ang" value="120" class="w-full bg-slate-900 border border-cyber-border rounded px-2 py-1 text-sm text-cyber-neonPink focus:border-cyber-neonPink outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="calculateVectors()" class="w-full py-2.5 rounded-lg font-display text-sm font-bold bg-cyber-neonCyan text-black hover:bg-cyan-300 transition-all shadow-[0_0_12px_rgba(0,243,255,0.3)] flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-calculator"></i> COMPUTE RESULTANT VECTOR ($\vec{R}$)
+                    </button>
+                </div>
+
+                <!-- Vector Canvas & Output -->
+                <div class="lg:col-span-7 glass-panel p-5 rounded-xl flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-display text-base font-semibold text-white"><i class="fa-solid fa-chart-line text-cyber-neonGreen"></i> Resultant Vector Space</h3>
+                            <div class="text-xs font-mono space-x-3">
+                                <span class="text-cyber-neonCyan">■ Vector A</span>
+                                <span class="text-cyber-neonPink">■ Vector B</span>
+                                <span class="text-cyber-neonGreen">■ Resultant R</span>
+                            </div>
+                        </div>
+                        <canvas id="vectorCanvas" class="w-full h-[280px] bg-slate-950/80 rounded-lg border border-cyber-border"></canvas>
+                    </div>
+
+                    <!-- Result Output Box -->
+                    <div class="p-4 rounded-lg bg-cyber-card border border-cyber-neonGreen/40 grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
+                        <div class="p-2 bg-slate-900/60 rounded">
+                            <span class="text-[10px] text-slate-400 block uppercase">Resultant Mag ($R$)</span>
+                            <span id="out-vec-r" class="font-mono text-base md:text-lg font-bold text-cyber-neonGreen">0.00</span>
+                        </div>
+                        <div class="p-2 bg-slate-900/60 rounded">
+                            <span class="text-[10px] text-slate-400 block uppercase">Angle ($\theta$)</span>
+                            <span id="out-vec-theta" class="font-mono text-base md:text-lg font-bold text-cyber-neonGreen">0.0°</span>
+                        </div>
+                        <div class="p-2 bg-slate-900/60 rounded">
+                            <span class="text-[10px] text-slate-400 block uppercase">Sum $R_x$</span>
+                            <span id="out-vec-rx" class="font-mono text-base md:text-lg font-bold text-slate-200">0.00</span>
+                        </div>
+                        <div class="p-2 bg-slate-900/60 rounded">
+                            <span class="text-[10px] text-slate-400 block uppercase">Sum $R_y$</span>
+                            <span id="out-vec-ry" class="font-mono text-base md:text-lg font-bold text-slate-200">0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: FORMULAS SHEET ================= -->
+        <section id="sec-formulas" class="tab-content hidden space-y-6">
+            <div class="border-b border-cyber-border pb-4 flex flex-col md:flex-row justify-between md:items-center gap-4">
+                <div>
+                    <h2 class="font-display text-xl md:text-2xl font-bold text-cyber-neonCyan flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark"></i> Term 1 Formula Databank
+                    </h2>
+                    <p class="text-sm text-slate-400">Click any card to expand definitions, variables, and common application conditions.</p>
+                </div>
+                <!-- Category Filter -->
+                <div class="flex gap-2 overflow-x-auto pb-1">
+                    <button onclick="filterFormulas('all')" class="f-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-cyber-neonCyan text-black">All Units</button>
+                    <button onclick="filterFormulas('kinematics')" class="f-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white">Kinematics</button>
+                    <button onclick="filterFormulas('dynamics')" class="f-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white">Dynamics</button>
+                    <button onclick="filterFormulas('energy')" class="f-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white">Energy & Momentum</button>
+                    <button onclick="filterFormulas('gravitation')" class="f-filter-btn px-3 py-1 rounded-full text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white">Gravitation</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="formula-grid">
+                <!-- Cards will be dynamically rendered here -->
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: FLASHCARDS ================= -->
+        <section id="sec-flashcards" class="tab-content hidden space-y-6">
+            <div class="border-b border-cyber-border pb-4 flex justify-between items-center">
+                <div>
+                    <h2 class="font-display text-xl md:text-2xl font-bold text-cyber-neonCyan flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group"></i> Active Recall Flashcard Matrix
+                    </h2>
+                    <p class="text-sm text-slate-400">Test core conceptual understanding and high-frequency exam traps.</p>
+                </div>
+                <div class="text-sm font-mono text-cyber-neonCyan">
+                    Card <span id="card-current-num">1</span> / <span id="card-total-num">8</span>
+                </div>
+            </div>
+
+            <div class="max-w-2xl mx-auto py-8">
+                <!-- 3D Flip Card Container -->
+                <div class="perspective-1000 w-full h-[280px] cursor-pointer" onclick="flipCard()">
+                    <div id="flashcard-inner" class="transform-style-3d w-full h-full relative rounded-2xl">
+                        <!-- Front -->
+                        <div class="backface-hidden absolute inset-0 glass-panel border-2 border-cyber-neonCyan/40 rounded-2xl p-6 flex flex-col justify-between items-center text-center shadow-[0_0_20px_rgba(0,243,255,0.15)]">
+                            <span class="text-xs font-mono text-cyber-neonCyan uppercase tracking-widest" id="card-category">Kinematics</span>
+                            <div class="text-lg md:text-xl font-semibold text-white px-4" id="card-question">Loading Question...</div>
+                            <span class="text-xs text-slate-500 font-mono"><i class="fa-solid fa-hand-pointer"></i> Click card to reveal answer</span>
+                        </div>
+                        <!-- Back -->
+                        <div class="rotate-y-180 backface-hidden absolute inset-0 glass-panel-pink border-2 border-cyber-neonPink/40 rounded-2xl p-6 flex flex-col justify-between items-center text-center shadow-[0_0_20px_rgba(255,0,127,0.15)]">
+                            <span class="text-xs font-mono text-cyber-neonPink uppercase tracking-widest">Concept Breakdown</span>
+                            <div class="text-base md:text-lg text-slate-200 px-4 leading-relaxed" id="card-answer">Loading Answer...</div>
+                            <span class="text-xs text-slate-500 font-mono">Click card to turn back</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-between items-center mt-6">
+                    <button onclick="prevCard()" class="px-5 py-2.5 rounded-lg border border-cyber-border bg-cyber-card text-slate-300 hover:border-cyber-neonCyan hover:text-white transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-chevron-left"></i> Previous
+                    </button>
+                    <button onclick="shuffleCards()" class="px-4 py-2.5 rounded-lg border border-cyber-border bg-cyber-card text-slate-400 hover:text-cyber-neonYellow">
+                        <i class="fa-solid fa-shuffle"></i> Shuffle
+                    </button>
+                    <button onclick="nextCard()" class="px-5 py-2.5 rounded-lg border border-cyber-border bg-cyber-card text-slate-300 hover:border-cyber-neonCyan hover:text-white transition-all flex items-center gap-2">
+                        Next <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 5: PRACTICE QUIZ ================= -->
+        <section id="sec-quizzes" class="tab-content hidden space-y-6">
+            <div class="border-b border-cyber-border pb-4 flex justify-between items-center">
+                <div>
+                    <h2 class="font-display text-xl md:text-2xl font-bold text-cyber-neonCyan flex items-center gap-2">
+                        <i class="fa-solid fa-vial-circle-check"></i> Term 1 Practice Exam Module
+                    </h2>
+                    <p class="text-sm text-slate-400">Multiple-choice questions with step-by-step diagnostic feedback.</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-400 block font-mono">Current Score</span>
+                    <span id="quiz-score" class="text-lg font-bold font-mono text-cyber-neonGreen">0 / 0</span>
+                </div>
+            </div>
+
+            <div class="max-w-3xl mx-auto space-y-6">
+                <!-- Question Card -->
+                <div class="glass-panel p-6 rounded-2xl border border-cyber-border space-y-4">
+                    <div class="flex justify-between items-center text-xs font-mono">
+                        <span class="text-cyber-neonCyan" id="quiz-unit-tag">UNIT 1: DYNAMICS</span>
+                        <span class="text-slate-500" id="quiz-q-num">Question 1 of 5</span>
+                    </div>
+
+                    <h3 class="text-lg md:text-xl font-semibold text-white" id="quiz-question-text">
+                        Loading problem...
+                    </h3>
+
+                    <!-- Options Grid -->
+                    <div class="space-y-3 pt-2" id="quiz-options-container">
+                        <!-- Options dynamically generated -->
+                    </div>
+
+                    <!-- Instant Explanation Panel -->
+                    <div id="quiz-feedback-panel" class="hidden p-4 rounded-xl border text-sm leading-relaxed transition-all">
+                        <div class="font-bold flex items-center gap-2 mb-1" id="quiz-feedback-title">
+                            <!-- Feedback Icon/Title -->
+                        </div>
+                        <p id="quiz-feedback-body" class="text-slate-300 text-xs md:text-sm"></p>
+                    </div>
+
+                    <!-- Next Question Button -->
+                    <div class="flex justify-end pt-2">
+                        <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-6 py-2.5 rounded-lg bg-cyber-neonCyan text-black font-display font-bold text-sm hover:bg-cyan-300 transition-all flex items-center gap-2 shadow-[0_0_10px_rgba(0,243,255,0.3)]">
+                            Next Question <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 6: CHECKLIST & WORKFLOW ================= -->
+        <section id="sec-checklist" class="tab-content hidden space-y-6">
+            <div class="border-b border-cyber-border pb-4">
+                <h2 class="font-display text-xl md:text-2xl font-bold text-cyber-neonCyan flex items-center gap-2">
+                    <i class="fa-solid fa-list-check"></i> Master Problem-Solving Protocol
+                </h2>
+                <p class="text-sm text-slate-400">Use this universal 5-step framework to solve any Physics 12 problem without missing marks.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Checklist Items -->
+                <div class="space-y-3">
+                    <div class="glass-panel p-4 rounded-xl border border-cyber-border flex items-start gap-3 hover:border-cyber-neonCyan transition-all cursor-pointer" onclick="toggleCheckItem(this)">
+                        <input type="checkbox" class="mt-1 rounded border-slate-700 bg-slate-900 text-cyber-neonCyan focus:ring-0 w-4 h-4 cursor-pointer">
+                        <div>
+                            <h4 class="font-display text-sm font-bold text-cyber-neonCyan">1. Coordinate & System Setup</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">Establish positive/negative axes. For inclines, rotate the x-axis parallel to the ramp surface.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-cyber-border flex items-start gap-3 hover:border-cyber-neonCyan transition-all cursor-pointer" onclick="toggleCheckItem(this)">
+                        <input type="checkbox" class="mt-1 rounded border-slate-700 bg-slate-900 text-cyber-neonCyan focus:ring-0 w-4 h-4 cursor-pointer">
+                        <div>
+                            <h4 class="font-display text-sm font-bold text-cyber-neonCyan">2. Isolate & Draw Free-Body Diagrams (FBD)</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">Represent forces as arrows originating from the center of mass. Never include components on the primary FBD.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-cyber-border flex items-start gap-3 hover:border-cyber-neonCyan transition-all cursor-pointer" onclick="toggleCheckItem(this)">
+                        <input type="checkbox" class="mt-1 rounded border-slate-700 bg-slate-900 text-cyber-neonCyan focus:ring-0 w-4 h-4 cursor-pointer">
+                        <div>
+                            <h4 class="font-display text-sm font-bold text-cyber-neonCyan">3. Vector Component Resolution</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">Decompose off-axis vectors: $F_x = F \cos\theta$ and $F_y = F \sin\theta$. Verify vector signs (+/-).</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-cyber-border flex items-start gap-3 hover:border-cyber-neonCyan transition-all cursor-pointer" onclick="toggleCheckItem(this)">
+                        <input type="checkbox" class="mt-1 rounded border-slate-700 bg-slate-900 text-cyber-neonCyan focus:ring-0 w-4 h-4 cursor-pointer">
+                        <div>
+                            <h4 class="font-display text-sm font-bold text-cyber-neonCyan">4. Independent Equations ($\Sigma F_x = ma_x$, $\Sigma F_y = ma_y$)</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">Write separate force or momentum balance equations for vertical and horizontal axes.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-4 rounded-xl border border-cyber-border flex items-start gap-3 hover:border-cyber-neonCyan transition-all cursor-pointer" onclick="toggleCheckItem(this)">
+                        <input type="checkbox" class="mt-1 rounded border-slate-700 bg-slate-900 text-cyber-neonCyan focus:ring-0 w-4 h-4 cursor-pointer">
+                        <div>
+                            <h4 class="font-display text-sm font-bold text-cyber-neonCyan">5. Unit & Sanity Check</h4>
+                            <p class="text-xs text-slate-400 mt-0.5">Verify sig-figs, units ($N, J, kg \cdot m/s$), and ensure velocity doesn't exceed speed of light!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Critical Exam Pitfalls Card -->
+                <div class="glass-panel-pink p-5 rounded-xl border border-cyber-neonPink/40 space-y-4">
+                    <h3 class="font-display text-base font-bold text-cyber-neonPink flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> High-Frequency Exam Traps
+                    </h3>
+
+                    <ul class="space-y-3 text-xs md:text-sm text-slate-300">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-cyber-neonPink mt-1"></i>
+                            <span><b>Assuming $F_N = mg$:</b> On inclines, $F_N = mg\cos\theta$. If pulling at an upward angle, $F_N = mg - F_a \sin\theta$.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-cyber-neonPink mt-1"></i>
+                            <span><b>Scalar vs Vector Addition:</b> Energy is scalar (add directly). Momentum is a vector (MUST add using x/y components or vector triangles!).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-cyber-neonPink mt-1"></i>
+                            <span><b>Orbital Radius Offset:</b> $r$ in $F_g = G \frac{M m}{r^2}$ is measured from the <i>center of the mass</i> ($r = R_{planet} + \text{altitude}$).</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-cyber-border py-4 text-center text-xs text-slate-500 font-mono">
+        Physics 12 Term 1 Study Environment &bull; Built with HTML5 Canvas & Tailwind CSS
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* ================= STATE & DATA ================= */
+        const formulaData = [
+            {
+                unit: 'kinematics',
+                title: 'Kinematic Equations',
+                eq: '\\vec{v} = \\vec{v}_0 + \\vec{a}t \\quad | \\quad \\vec{d} = \\vec{v}_0 t + \\frac{1}{2}\\vec{a}t^2',
+                desc: 'Applies to motion with constant acceleration. Always resolve vectors into x and y components independently.'
+            },
+            {
+                unit: 'kinematics',
+                title: 'Projectile Velocity Components',
+                eq: 'v_x = v\\cos\\theta, \\quad v_y = v\\sin\\theta',
+                desc: 'Horizontal motion has zero acceleration ($a_x = 0$), so $v_x$ remains constant throughout flight.'
+            },
+            {
+                unit: 'dynamics',
+                title: "Newton's Second Law",
+                eq: '\\Sigma \\vec{F} = m\\vec{a}',
+                desc: 'Net force equals mass times acceleration. Break down into $\\Sigma F_x = m a_x$ and $\\Sigma F_y = m a_y$.'
+            },
+            {
+                unit: 'dynamics',
+                title: 'Inclined Plane Components',
+                eq: 'F_{g,\\parallel} = mg\\sin\\theta, \\quad F_{g,\\perp} = mg\\cos\\theta',
+                desc: '$F_{g,\\parallel}$ pulls the object down the ramp; $F_{g,\\perp}$ balances the Normal Force $F_N$.'
+            },
+            {
+                unit: 'energy',
+                title: 'Work & Kinetic Energy',
+                eq: 'W = F d \\cos\\theta = \\Delta E_k, \\quad E_k = \\frac{1}{2}m v^2',
+                desc: 'Work is a scalar dot-product. Only force parallel to displacement does work.'
+            },
+            {
+                unit: 'energy',
+                title: 'Conservation of Momentum (2D)',
+                eq: '\\vec{p}_i = \\vec{p}_f \\implies \\Sigma p_{ix} = \\Sigma p_{fx}, \\quad \\Sigma p_{iy} = \\Sigma p_{fy}',
+                desc: 'Total momentum is conserved in all isolated collisions in both X and Y directions.'
+            },
+            {
+                unit: 'gravitation',
+                title: 'Centripetal Acceleration',
+                eq: 'a_c = \\frac{v^2}{r} = \\frac{4\\pi^2 r}{T^2}',
+                desc: 'Always directed toward the center of circular path. Required for circular motion.'
+            },
+            {
+                unit: 'gravitation',
+                title: 'Universal Law of Gravitation',
+                eq: 'F_g = G \\frac{m_1 m_2}{r^2}',
+                desc: '$G = 6.67 \\times 10^{-11} \\text{ N}\\cdot\\text{m}^2/\\text{kg}^2$. $r$ is center-to-center distance.'
+            },
+            {
+                unit: 'gravitation',
+                title: 'Orbital Speed',
+                eq: 'v_{orbit} = \\sqrt{\\frac{GM}{r}}',
+                desc: 'Derived by setting $F_g = F_c$. Speed is independent of satellite mass $m$.'
+            }
+        ];
+
+        const flashcardData = [
+            {
+                category: "Kinematics",
+                q: "At the peak height of a projectile's parabolic path, what is its vertical velocity and total acceleration?",
+                a: "Vertical velocity $v_y = 0$, but acceleration is STILL $g = 9.8 \\text{ m/s}^2$ downward!"
+            },
+            {
+                category: "Dynamics",
+                q: "When pulling a sled at an upward angle $\\theta$, how does the Normal Force compare to $mg$?",
+                a: "$F_N = mg - F_a \\sin\\theta$. Because the upward force component supports weight, $F_N < mg$."
+            },
+            {
+                category: "Energy & Momentum",
+                q: "Is kinetic energy conserved in an inelastic collision?",
+                a: "No! Kinetic energy is transformed into heat, sound, and deformation. Only total momentum is conserved."
+            },
+            {
+                category: "Gravitation",
+                q: "If an orbiting satellite's altitude doubles relative to Earth's center ($r \\rightarrow 2r$), how does $F_g$ change?",
+                a: "By the Inverse-Square Law, $F_g$ decreases to $\\frac{1}{2^2} = \\frac{1}{4}$ of its original value."
+            },
+            {
+                category: "Circular Motion",
+                q: "What force provides centripetal acceleration for a car making a turn on a flat unbanked road?",
+                a: "Static friction ($F_f$) between the tires and the road surface."
+            }
+        ];
+
+        const quizData = [
+            {
+                unit: "UNIT 1: KINEMATICS",
+                q: "A projectile is launched from a cliff at 30 m/s at an angle of 30° above horizontal. What is its horizontal velocity ($v_x$) after 2.0 seconds (ignoring air resistance)?",
+                options: [
+                    "15.0 m/s",
+                    "26.0 m/s",
+                    "30.0 m/s",
+                    "6.4 m/s"
+                ],
+                correct: 1,
+                explanation: "Because horizontal acceleration $a_x = 0$, $v_x$ remains constant: $v_x = v_0 \\cos(30°) = 30 \\times 0.866 = 26.0 \\text{ m/s}$."
+            },
+            {
+                unit: "UNIT 2: DYNAMICS",
+                q: "A 5.0 kg block rests on a 35° incline with coefficient of friction $\\mu = 0.30$. What is the magnitude of the normal force ($F_N$)?",
+                options: [
+                    "49.0 N",
+                    "28.1 N",
+                    "40.1 N",
+                    "14.7 N"
+                ],
+                correct: 2,
+                explanation: "On an incline, $F_N = mg \\cos\\theta = 5.0 \\times 9.8 \\times \\cos(35°) = 40.13 \\text{ N}$."
+            },
+            {
+                unit: "UNIT 3: MOMENTUM",
+                q: "A 1000 kg car moving East at 10 m/s collides and sticks to a 2000 kg truck moving North at 5 m/s. What is the x-component of total momentum after collision?",
+                options: [
+                    "10,000 kg·m/s",
+                    "20,000 kg·m/s",
+                    "15,000 kg·m/s",
+                    "0 kg·m/s"
+                ],
+                correct: 0,
+                explanation: "Momentum is conserved in each axis. Total $p_x = m_1 v_{1x} = 1000 \\times 10 = 10,000 \\text{ kg}\\cdot\\text{m/s}$."
+            }
+        ];
+
+        let currentCardIdx = 0;
+        let isCardFlipped = false;
+        let currentQuizIdx = 0;
+        let quizScore = 0;
+        let quizAnswered = false;
+
+        /* ================= INITIALIZATION ================= */
+        window.onload = function() {
+            renderFormulas(formulaData);
+            loadFlashcard(0);
+            loadQuizQuestion(0);
+            initProjectileCanvas();
+            initInclineCanvas();
+            initOrbitCanvas();
+            initVectorCanvas();
+            calculateVectors();
+        }
+
+        /* TAB NAVIGATION */
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-cyber-neonCyan/20', 'text-cyber-neonCyan', 'border-cyber-neonCyan');
+                btn.classList.add('text-slate-400', 'border-transparent');
+            });
+
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.add('bg-cyber-neonCyan/20', 'text-cyber-neonCyan', 'border-cyber-neonCyan');
+            activeBtn.classList.remove('text-slate-400', 'border-transparent');
+
+            // Trigger canvas redraws if switching to interactive tabs
+            if (tabId === 'calculator') calculateVectors();
+            if (tabId === 'simulations') drawProjectileStatic();
+        }
+
+        /* SIMULATION SWITCHER */
+        function loadSim(simType) {
+            document.querySelectorAll('.sim-panel').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`sim-container-${simType}`).classList.remove('hidden');
+
+            ['projectile', 'incline', 'orbit'].forEach(type => {
+                const btn = document.getElementById(`sim-btn-${type}`);
+                if (type === simType) {
+                    btn.classList.add('bg-cyber-neonCyan', 'text-black');
+                    btn.classList.remove('text-slate-300');
+                } else {
+                    btn.classList.remove('bg-cyber-neonCyan', 'text-black');
+                    btn.classList.add('text-slate-300');
+                }
+            });
+
+            if (simType === 'incline') calculateIncline();
+            if (simType === 'orbit') updateOrbit();
+            if (simType === 'projectile') drawProjectileStatic();
+        }
+
+        /* ================= 1. PROJECTILE CANVAS SIM ================= */
+        let projAnimationId = null;
+
+        function initProjectileCanvas() {
+            const canvas = document.getElementById('projectileCanvas');
+            canvas.width = canvas.parentElement.clientWidth - 32;
+            canvas.height = 320;
+            drawProjectileStatic();
+
+            // Setup listeners for live input display
+            ['v', 'angle', 'h', 'g'].forEach(param => {
+                document.getElementById(`input-proj-${param}`).addEventListener('input', (e) => {
+                    const unit = param === 'angle' ? '°' : param === 'g' ? ' m/s²' : param === 'h' ? ' m' : ' m/s';
+                    document.getElementById(`val-proj-${param}`).innerText = e.target.value + unit;
+                    drawProjectileStatic();
+                });
+            });
+        }
+
+        function drawProjectileStatic() {
+            const canvas = document.getElementById('projectileCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Grid
+            ctx.strokeStyle = '#1f293d';
+            ctx.lineWidth = 1;
+            for(let x = 0; x < canvas.width; x += 40) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for(let y = 0; y < canvas.height; y += 40) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            // Launch Platform
+            const h = parseFloat(document.getElementById('input-proj-h').value);
+            const groundY = canvas.height - 30;
+            const platformY = groundY - h * 3;
+
+            ctx.fillStyle = '#00f3ff';
+            ctx.fillRect(10, platformY, 20, groundY - platformY + 30);
+
+            // Calculate Theoretical Path
+            const v0 = parseFloat(document.getElementById('input-proj-v').value);
+            const angleDeg = parseFloat(document.getElementById('input-proj-angle').value);
+            const g = parseFloat(document.getElementById('input-proj-g').value);
+            const angleRad = angleDeg * Math.PI / 180;
+
+            const vx = v0 * Math.cos(angleRad);
+            const vy = v0 * Math.sin(angleRad);
+
+            // Max Time: vy*t - 0.5*g*t^2 + h = 0
+            const tFlight = (vy + Math.sqrt(vy*vy + 2*g*h)) / g;
+            const xMax = vx * tFlight;
+            const yMax = h + (vy * vy) / (2 * g);
+
+            document.getElementById('out-proj-xmax').innerText = xMax.toFixed(1);
+            document.getElementById('out-proj-ymax').innerText = yMax.toFixed(1);
+            document.getElementById('out-proj-time').innerText = tFlight.toFixed(2);
+
+            // Draw Trajectory Preview Line
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(0, 243, 255, 0.4)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([4, 4]);
+
+            const scaleX = (canvas.width - 60) / Math.max(xMax, 50);
+            const scaleY = (canvas.height - 80) / Math.max(yMax, 30);
+
+            for(let t = 0; t <= tFlight; t += tFlight / 50) {
+                const px = 20 + (vx * t) * scaleX;
+                const py = groundY - (h + vy * t - 0.5 * g * t * t) * scaleY;
+                if(t === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function runProjectile() {
+            if(projAnimationId) cancelAnimationFrame(projAnimationId);
+
+            const canvas = document.getElementById('projectileCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const v0 = parseFloat(document.getElementById('input-proj-v').value);
+            const angleDeg = parseFloat(document.getElementById('input-proj-angle').value);
+            const g = parseFloat(document.getElementById('input-proj-g').value);
+            const h = parseFloat(document.getElementById('input-proj-h').value);
+            const angleRad = angleDeg * Math.PI / 180;
+
+            const vx = v0 * Math.cos(angleRad);
+            const vy = v0 * Math.sin(angleRad);
+            const tFlight = (vy + Math.sqrt(vy*vy + 2*g*h)) / g;
+            const xMax = vx * tFlight;
+            const yMax = h + (vy * vy) / (2 * g);
+
+            const scaleX = (canvas.width - 60) / Math.max(xMax, 50);
+            const scaleY = (canvas.height - 80) / Math.max(yMax, 30);
+            const groundY = canvas.height - 30;
+
+            let startTime = null;
+
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                let progressTime = (timestamp - startTime) / 1000 * 1.5; // Speed factor
+
+                if (progressTime > tFlight) progressTime = tFlight;
+
+                drawProjectileStatic();
+
+                // Current Ball Position
+                const px = 20 + (vx * progressTime) * scaleX;
+                const py = groundY - (h + vy * progressTime - 0.5 * g * progressTime * progressTime) * scaleY;
+
+                // Draw Projectile Glow
+                ctx.beginPath();
+                ctx.arc(px, py, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#ff007f';
+                ctx.shadowColor = '#ff007f';
+                ctx.shadowBlur = 12;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+
+                if (progressTime < tFlight) {
+                    projAnimationId = requestAnimationFrame(animate);
+                }
+            }
+
+            projAnimationId = requestAnimationFrame(animate);
+        }
+
+        function resetProjectile() {
+            if(projAnimationId) cancelAnimationFrame(projAnimationId);
+            drawProjectileStatic();
+        }
+
+        /* ================= 2. INCLINE CANVA SIM ================= */
+        function initInclineCanvas() {
+            const canvas = document.getElementById('inclineCanvas');
+            canvas.width = canvas.parentElement.clientWidth - 32;
+            canvas.height = 320;
+
+            ['angle', 'm', 'mu'].forEach(param => {
+                document.getElementById(`input-inc-${param}`).addEventListener('input', (e) => {
+                    const unit = param === 'angle' ? '°' : param === 'm' ? ' kg' : '';
+                    document.getElementById(`val-inc-${param}`).innerText = e.target.value + unit;
+                    calculateIncline();
+                });
+            });
+
+            calculateIncline();
+        }
+
+        function calculateIncline() {
+            const angleDeg = parseFloat(document.getElementById('input-inc-angle').value);
+            const m = parseFloat(document.getElementById('input-inc-m').value);
+            const mu = parseFloat(document.getElementById('input-inc-mu').value);
+            const g = 9.8;
+
+            const rad = angleDeg * Math.PI / 180;
+            const Fg = m * g;
+            const Fparallel = Fg * Math.sin(rad);
+            const Fn = Fg * Math.cos(rad);
+            const FfMax = mu * Fn;
+
+            let acceleration = 0;
+            let Fnet = Fparallel - FfMax;
+
+            if (Fnet > 0) {
+                acceleration = Fnet / m;
+            } else {
+                Fnet = 0;
+            }
+
+            document.getElementById('out-inc-fparallel').innerText = Fparallel.toFixed(1);
+            document.getElementById('out-inc-fn').innerText = Fn.toFixed(1);
+            document.getElementById('out-inc-ff').innerText = Math.min(FfMax, Fparallel).toFixed(1);
+            document.getElementById('out-inc-a').innerText = acceleration.toFixed(2);
+
+            drawInclineCanvas(angleDeg, Fparallel, Fn, Math.min(FfMax, Fparallel));
+        }
+
+        function drawInclineCanvas(angle, Fp, Fn, Ff) {
+            const canvas = document.getElementById('inclineCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const rad = angle * Math.PI / 180;
+            const rampLength = 220;
+            const startX = 50;
+            const startY = 260;
+
+            const endX = startX + rampLength * Math.cos(rad);
+            const endY = startY - rampLength * Math.sin(rad);
+
+            // Draw Ramp Triangle
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.lineTo(endX, startY);
+            ctx.closePath();
+            ctx.fillStyle = '#121824';
+            ctx.strokeStyle = '#00f3ff';
+            ctx.lineWidth = 2;
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw Box on Ramp
+            const boxX = startX + (rampLength * 0.5) * Math.cos(rad);
+            const boxY = startY - (rampLength * 0.5) * Math.sin(rad);
+
+            ctx.save();
+            ctx.translate(boxX, boxY);
+            ctx.rotate(-rad);
+
+            ctx.fillStyle = '#ff007f';
+            ctx.fillRect(-20, -20, 40, 20);
+
+            // Force Vectors
+            // F_parallel (down slope)
+            ctx.beginPath();
+            ctx.moveTo(0, -10);
+            ctx.lineTo(-Fp * 0.8, -10);
+            ctx.strokeStyle = '#00f3ff';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Normal Force
+            ctx.beginPath();
+            ctx.moveTo(0, -10);
+            ctx.lineTo(0, -10 - Fn * 0.8);
+            ctx.strokeStyle = '#ff007f';
+            ctx.stroke();
+
+            // Friction Force
+            ctx.beginPath();
+            ctx.moveTo(0, -10);
+            ctx.lineTo(Ff * 0.8, -10);
+            ctx.strokeStyle = '#ffea00';
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        /* ================= 3. ORBIT CANVAS SIM ================= */
+        function initOrbitCanvas() {
+            const canvas = document.getElementById('orbitCanvas');
+            canvas.width = canvas.parentElement.clientWidth - 32;
+            canvas.height = 320;
+
+            document.getElementById('input-orb-h').addEventListener('input', (e) => {
+                document.getElementById('val-orb-h').innerText = e.target.value + ' km';
+                updateOrbit();
+            });
+
+            document.getElementById('input-orb-m').addEventListener('input', (e) => {
+                document.getElementById('val-orb-m').innerText = `Planet (${e.target.value} M⊕)`;
+                updateOrbit();
+            });
+
+            updateOrbit();
+        }
+
+        function updateOrbit() {
+            const canvas = document.getElementById('orbitCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const hKm = parseFloat(document.getElementById('input-orb-h').value);
+            const mFactor = parseFloat(document.getElementById('input-orb-m').value);
+
+            const G = 6.67e-11;
+            const M_Earth = 5.97e24 * mFactor;
+            const R_Earth = 6371e3; // meters
+            const r = R_Earth + (hKm * 1000);
+
+            const v = Math.sqrt((G * M_Earth) / r); // m/s
+            const ac = (v * v) / r; // m/s2
+            const T = (2 * Math.PI * r) / v; // seconds
+
+            document.getElementById('out-orb-v').innerText = (v / 1000).toFixed(2) + ' km/s';
+            document.getElementById('out-orb-ac').innerText = ac.toFixed(2) + ' m/s²';
+            document.getElementById('out-orb-t').innerText = (T / 60).toFixed(1) + ' mins';
+
+            // Draw Central Planet
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 35, 0, Math.PI * 2);
+            ctx.fillStyle = '#9d00ff';
+            ctx.shadowColor = '#9d00ff';
+            ctx.shadowBlur = 20;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Draw Orbit Track
+            const orbitRadius = 35 + (hKm / 10000) * 80;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, orbitRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(0, 243, 255, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Satellite
+            const satX = centerX + orbitRadius * Math.cos(Date.now() / 1000);
+            const satY = centerY + orbitRadius * Math.sin(Date.now() / 1000);
+
+            ctx.beginPath();
+            ctx.arc(satX, satY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#00f3ff';
+            ctx.fill();
+        }
+
+        /* ================= 4. VECTOR CALCULATOR ================= */
+        function initVectorCanvas() {
+            const canvas = document.getElementById('vectorCanvas');
+            canvas.width = canvas.parentElement.clientWidth - 32;
+            canvas.height = 280;
+        }
+
+        function calculateVectors() {
+            const magA = parseFloat(document.getElementById('vecA-mag').value) || 0;
+            const angA = parseFloat(document.getElementById('vecA-ang').value) || 0;
+            const magB = parseFloat(document.getElementById('vecB-mag').value) || 0;
+            const angB = parseFloat(document.getElementById('vecB-ang').value) || 0;
+
+            const radA = angA * Math.PI / 180;
+            const radB = angB * Math.PI / 180;
+
+            const Ax = magA * Math.cos(radA);
+            const Ay = magA * Math.sin(radA);
+            const Bx = magB * Math.cos(radB);
+            const By = magB * Math.sin(radB);
+
+            document.getElementById('vecA-components').innerText = `Ax: ${Ax.toFixed(1)} | Ay: ${Ay.toFixed(1)}`;
+            document.getElementById('vecB-components').innerText = `Bx: ${Bx.toFixed(1)} | By: ${By.toFixed(1)}`;
+
+            const Rx = Ax + Bx;
+            const Ry = Ay + By;
+            const Rmag = Math.sqrt(Rx * Rx + Ry * Ry);
+            let Rangle = Math.atan2(Ry, Rx) * 180 / Math.PI;
+            if (Rangle < 0) Rangle += 360;
+
+            document.getElementById('out-vec-r').innerText = Rmag.toFixed(2);
+            document.getElementById('out-vec-theta').innerText = Rangle.toFixed(1) + '°';
+            document.getElementById('out-vec-rx').innerText = Rx.toFixed(1);
+            document.getElementById('out-vec-ry').innerText = Ry.toFixed(1);
+
+            drawVectorDiagram(Ax, Ay, Bx, By, Rx, Ry);
+        }
+
+        function drawVectorDiagram(Ax, Ay, Bx, By, Rx, Ry) {
+            const canvas = document.getElementById('vectorCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const originX = canvas.width / 2;
+            const originY = canvas.height / 2;
+            const scale = 3;
+
+            // Draw Axes
+            ctx.strokeStyle = '#1f293d';
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(0, originY); ctx.lineTo(canvas.width, originY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(originX, 0); ctx.lineTo(originX, canvas.height); ctx.stroke();
+
+            // Vector A
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + Ax * scale, originY - Ay * scale);
+            ctx.strokeStyle = '#00f3ff';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Vector B (head-to-tail from A)
+            ctx.beginPath();
+            ctx.moveTo(originX + Ax * scale, originY - Ay * scale);
+            ctx.lineTo(originX + (Ax + Bx) * scale, originY - (Ay + By) * scale);
+            ctx.strokeStyle = '#ff007f';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+
+            // Resultant Vector R
+            ctx.beginPath();
+            ctx.moveTo(originX, originY);
+            ctx.lineTo(originX + Rx * scale, originY - Ry * scale);
+            ctx.strokeStyle = '#00ff66';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        /* ================= 5. FORMULAS RENDERER ================= */
+        function renderFormulas(items) {
+            const container = document.getElementById('formula-grid');
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel p-4 rounded-xl border border-cyber-border hover:border-cyber-neonCyan transition-all space-y-2';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center text-xs font-mono text-cyber-neonCyan">
+                        <span class="uppercase font-bold">${item.unit}</span>
+                        <i class="fa-solid fa-bookmark"></i>
+                    </div>
+                    <h3 class="font-display text-base font-bold text-white">${item.title}</h3>
+                    <div class="p-3 bg-slate-950/80 rounded border border-cyber-border/80 text-center font-mono text-cyber-neonYellow text-sm">
+                        $${item.eq}$
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed pt-1">${item.desc}</p>
+                `;
+                container.appendChild(card);
+            });
+
+            if (window.renderMathInElement) {
+                renderMathInElement(container);
+            }
+        }
+
+        function filterFormulas(unit) {
+            document.querySelectorAll('.f-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-cyber-neonCyan', 'text-black');
+                btn.classList.add('bg-slate-800', 'text-slate-300');
+            });
+
+            event.target.classList.add('bg-cyber-neonCyan', 'text-black');
+            event.target.classList.remove('bg-slate-800', 'text-slate-300');
+
+            if (unit === 'all') {
+                renderFormulas(formulaData);
+            } else {
+                renderFormulas(formulaData.filter(f => f.unit === unit));
+            }
+        }
+
+        /* ================= 6. FLASHCARDS SYSTEM ================= */
+        function loadFlashcard(idx) {
+            const card = flashcardData[idx];
+            document.getElementById('card-category').innerText = card.category;
+            document.getElementById('card-question').innerHTML = card.q;
+            document.getElementById('card-answer').innerHTML = card.a;
+            document.getElementById('card-current-num').innerText = idx + 1;
+            document.getElementById('card-total-num').innerText = flashcardData.length;
+
+            if (isCardFlipped) {
+                document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+                isCardFlipped = false;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.getElementById('flashcard-inner'));
+            }
+        }
+
+        function flipCard() {
+            const inner = document.getElementById('flashcard-inner');
+            isCardFlipped = !isCardFlipped;
+            if(isCardFlipped) inner.classList.add('rotate-y-180');
+            else inner.classList.remove('rotate-y-180');
+        }
+
+        function nextCard() {
+            currentCardIdx = (currentCardIdx + 1) % flashcardData.length;
+            loadFlashcard(currentCardIdx);
+        }
+
+        function prevCard() {
+            currentCardIdx = (currentCardIdx - 1 + flashcardData.length) % flashcardData.length;
+            loadFlashcard(currentCardIdx);
+        }
+
+        function shuffleCards() {
+            flashcardData.sort(() => Math.random() - 0.5);
+            currentCardIdx = 0;
+            loadFlashcard(0);
+        }
+
+        /* ================= 7. PRACTICE QUIZ SYSTEM ================= */
+        function loadQuizQuestion(idx) {
+            quizAnswered = false;
+            const q = quizData[idx];
+            document.getElementById('quiz-unit-tag').innerText = q.unit;
+            document.getElementById('quiz-q-num').innerText = `Question ${idx + 1} of ${quizData.length}`;
+            document.getElementById('quiz-question-text').innerHTML = q.q;
+
+            const optsContainer = document.getElementById('quiz-options-container');
+            optsContainer.innerHTML = '';
+
+            q.options.forEach((opt, oIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-3.5 rounded-xl border border-cyber-border bg-slate-900/60 hover:border-cyber-neonCyan hover:bg-slate-800 transition-all text-sm text-slate-200 flex items-center justify-between';
+                btn.innerHTML = `<span>${opt}</span><i class="fa-regular fa-circle text-slate-600"></i>`;
+                btn.onclick = () => selectQuizOption(oIdx, btn);
+                optsContainer.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback-panel').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            if (window.renderMathInElement) {
+                renderMathInElement(document.getElementById('sec-quizzes'));
+            }
+        }
+
+        function selectQuizOption(selectedIdx, btnEl) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+
+            const q = quizData[currentQuizIdx];
+            const feedbackPanel = document.getElementById('quiz-feedback-panel');
+            const feedbackTitle = document.getElementById('quiz-feedback-title');
+            const feedbackBody = document.getElementById('quiz-feedback-body');
+
+            feedbackPanel.classList.remove('hidden');
+
+            if (selectedIdx === q.correct) {
+                quizScore++;
+                btnEl.classList.add('border-cyber-neonGreen', 'bg-cyber-neonGreen/10');
+                btnEl.querySelector('i').className = 'fa-solid fa-circle-check text-cyber-neonGreen';
+
+                feedbackPanel.className = 'p-4 rounded-xl border border-cyber-neonGreen/50 bg-cyber-neonGreen/10 text-sm';
+                feedbackTitle.innerHTML = '<i class="fa-solid fa-check text-cyber-neonGreen"></i> Correct!';
+            } else {
+                btnEl.classList.add('border-cyber-neonPink', 'bg-cyber-neonPink/10');
+                btnEl.querySelector('i').className = 'fa-solid fa-circle-xmark text-cyber-neonPink';
+
+                feedbackPanel.className = 'p-4 rounded-xl border border-cyber-neonPink/50 bg-cyber-neonPink/10 text-sm';
+                feedbackTitle.innerHTML = '<i class="fa-solid fa-xmark text-cyber-neonPink"></i> Incorrect Target';
+            }
+
+            document.getElementById('quiz-score').innerText = `${quizScore} / ${quizData.length}`;
+            feedbackBody.innerHTML = q.explanation;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+
+            if (window.renderMathInElement) {
+                renderMathInElement(feedbackPanel);
+            }
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIdx = (currentQuizIdx + 1) % quizData.length;
+            loadQuizQuestion(currentQuizIdx);
+        }
+
+        /* CHECKLIST TOGGLE HELPER */
+        function toggleCheckItem(el) {
+            const checkbox = el.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+        }
+    </script>
+</body>
+</html>
